@@ -3,7 +3,7 @@ import mongoose from 'mongoose'
 export function connectDB() {
   mongoose
     .connect(
-      `mongodb+srv://${process.env.MONGO_ID}:${process.env.MONGO_PWD}@cluster0.3w9flsd.mongodb.net/?retryWrites=true&w=majority`,
+      `mongodb+srv://${process.env.MONGO_ID}:${process.env.MONGO_PWD}@cluster0.cdeowod.mongodb.net/`,
     )
     .then(() => {
       console.log('connecté à mongo DB')
@@ -13,3 +13,4 @@ export function connectDB() {
       console.log(err)
     })
 }
+ 
