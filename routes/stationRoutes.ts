@@ -4,10 +4,10 @@ import { admin, auth, employe } from "../middlewares/authentification";
 
 const stationRoutes = Router();
 
-stationRoutes.get('/', auth, admin, getAllStations);
-stationRoutes.put("/:id", updateStation)
-stationRoutes.delete("/:id",deleteStation)
-stationRoutes.post('/', createStation);
+stationRoutes.get('/', getAllStations);
+stationRoutes.put("/:id", auth, admin, updateStation)
+stationRoutes.delete("/:id", auth, admin, deleteStation)
+stationRoutes.post('/', auth, admin, createStation);
 
 
 export default stationRoutes;
