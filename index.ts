@@ -6,6 +6,7 @@ import { connectDB } from './utils/connectDB';
 import 'dotenv/config';
 import trainRoutes from "./routes/trainRoutes";
 import stationRoutes from "./routes/stationRoutes";
+import userRoutes from "./routes/userRoutes";
 
 connectDB();
 
@@ -15,5 +16,6 @@ app.use(express.json());
 
 app.use('/api/trains', trainRoutes);
 app.use('/api/stations', stationRoutes);
+app.use('/api/users', userRoutes);
 
 app.listen(5000, () => console.log("server on port 5000"));

@@ -1,4 +1,3 @@
-// routes/trainRoutes.js
 import {Router} from "express";
 import {createStation, deleteStation, getAllStations, updateStation} from "../controlers/stationController";
 
