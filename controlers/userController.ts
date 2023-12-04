@@ -66,7 +66,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
         }
 
         const token: string = generateToken(user);
-
+        user.password = "";
         res.status(200).json({ user, token });
     } catch (error) {
         console.error(error);
@@ -80,15 +80,14 @@ export const register = async (req: Request, res: Response): Promise<void> => {
         const saltRounds = 10;
         user.password = await bcrypt.hash(String(user.password), saltRounds);
 
-        // Check if the email or username already exists
         const existingUser = await userRepository.findUserByEmailOrUsername(user.email, user.pseudo);
         if (existingUser) {
             res.status(400).json({ message: 'Email or username already exists' });
             return;
         }
-
         const newUser: IUser = await userRepository.createUser(user);
         const token: string = generateToken(newUser);
+        newUser.password = "";
         res.status(201).json({
             newUser, token
         });

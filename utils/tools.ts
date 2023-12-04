@@ -2,7 +2,6 @@ import { IUser } from "../models/User";
 import jwt from 'jsonwebtoken';
 
 export function generateToken(user: IUser) {
-    const secretKey = 'yourSecretKey'; // Replace with your actual secret key
     const payload = {
         userId: user._id,
         email: user.email,
@@ -13,5 +12,5 @@ export function generateToken(user: IUser) {
         expiresIn: '1h', // You can adjust the expiration time as needed
     };
 
-    return jwt.sign(payload, secretKey, options);
+    return jwt.sign(payload, String(process.env.JWT_KEY), options);
 }
