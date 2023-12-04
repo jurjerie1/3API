@@ -39,6 +39,7 @@ export const createTrain = async (req: Request, res: Response): Promise<void> =>
   const train: ITrain = req.body;
   try {
     const newTrain = await trainRepository.createTrain(train);
+    res.status(204);
     res.json(newTrain);
   } catch (error) {
     res.status(500).json({ error: error instanceof Error ? error.message : 'Internal Server Error' });

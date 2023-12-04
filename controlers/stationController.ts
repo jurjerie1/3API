@@ -14,3 +14,37 @@ export const createStation = async (req: Request, res: Response): Promise<void> 
         res.status(500).json({ error: error instanceof Error ? error.message : 'Internal Server Error' });
     }
 };
+
+export const getAllStations = async (req: Request, res: Response): Promise<void> => {
+    const name: String = req.query.name as string;
+    try {
+        const trains = await stationRepository.getAllStation(name);
+        res.json(trains);
+    }
+    catch (error){
+        res.status(500).json({ error: error instanceof Error ? error.message : 'Internal Server Error' });
+    }
+};
+
+export const updateStation = async (req : Request, res: Response): Promise<void> => {
+    const id: String = req.params.id as String;
+    console.log(id)
+    const station: IStation = req.body;
+    try {
+        const updateStation = await stationRepository.updateStation(id, station);
+        res.json(updateStation);
+    }
+    catch (error){
+        res.status(500).json({ error: error instanceof Error ? error.message : 'Internal Server Error' });
+    }
+}
+export const deleteStation = async (req : Request, res : Response): Promise<void> => {
+    const id : String = req.params.id;
+    try{
+        const deleteStation = await stationRepository.deleteStation(id)
+        res.json(deleteStation)
+    }
+    catch (error){
+        res.status(500).json({ error: error instanceof Error ? error.message : 'Internal Server Error' });
+    }
+}

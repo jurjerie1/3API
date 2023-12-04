@@ -13,7 +13,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-app.use('/trains', trainRoutes);
-app.use('/stations', stationRoutes);
+app.use('/api/trains', trainRoutes);
+app.use('/api/stations', stationRoutes);
 
 app.listen(5000, () => console.log("server on port 5000"));
