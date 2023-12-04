@@ -1,10 +1,17 @@
 import { Request, Response } from 'express';
 import TrainRepository from '../repositories/trainRepository';
 import { Train, ITrain } from '../models/Train';
+import {validate} from "../middlewares/validationMiddleware"
 
 const trainRepository = new TrainRepository(Train);
 
 export const getAllTrains = async (req: Request, res: Response): Promise<void> => {
+  const { error, value: validatedParams } = validate.getAllTrain.validate(req.query, { stripUnknown: true });
+  if (error) {
+    res.status(400).json({ error: error.details[0].message });
+    return;
+  }
+
   const name = req.query.name as string;
   const time_of_departure = req.query.time_of_departure as string;
   const start_station = req.query.start_station as string;
@@ -22,6 +29,12 @@ export const getAllTrains = async (req: Request, res: Response): Promise<void> =
 };
 
 export const getTrainById = async (req: Request, res: Response): Promise<void> => {
+  const { error, value: validatedParams } = validate.getTrainById.validate(req.params, { stripUnknown: true });
+  if (error) {
+    res.status(400).json({ error: error.details[0].message });
+    return;
+  }
+
   const { id } = req.params;
   try {
     const train = await trainRepository.getTrainById(id);
@@ -36,6 +49,11 @@ export const getTrainById = async (req: Request, res: Response): Promise<void> =
 };
 
 export const createTrain = async (req: Request, res: Response): Promise<void> => {
+  const { error, value: validatedParams } = validate.createTrain.validate(req.body, { stripUnknown: true });
+  if (error) {
+    res.status(400).json({ error: error.details[0].message });
+    return;
+  }
   const train: ITrain = req.body;
   try {
     const newTrain = await trainRepository.createTrain(train);
