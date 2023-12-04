@@ -1,6 +1,7 @@
 // trainRepository.ts
 import { Model, Document } from 'mongoose';
 import { ITrain } from '../models/Train';
+import { deleteStation } from '../controlers/stationController';
 
 class TrainRepository {
     private model: Model<Document & ITrain>;
@@ -9,7 +10,7 @@ class TrainRepository {
         this.model = model;
     }
 
-    getAllTrains(name:string = "", time_of_departure:string ="", start_station:string = "", end_station:string =""): Promise<ITrain[]> {
+    getAllTrains(name:string = "", time_of_departure:string ="", start_station:string = "", end_station:string ="", limit:number = 10): Promise<ITrain[]> {
         console.log(name, time_of_departure);
         const query: Record<string, any> = {};
 
@@ -28,7 +29,7 @@ class TrainRepository {
             query.end_station = end_station;
         }
 
-        return this.model.find(query).exec();
+        return this.model.find(query).limit(limit).exec();
     }
 
     getTrainById(id: string): Promise<ITrain | null> {
@@ -36,6 +37,7 @@ class TrainRepository {
     }
 
     createTrain(train: ITrain): Promise<ITrain> {
+        console.log(train);
         return this.model.create(train);
     }
 
@@ -46,6 +48,17 @@ class TrainRepository {
     updateTrain(id: string, train: ITrain): Promise<ITrain | null> {
         return this.model.findByIdAndUpdate(id, train, { new: true }).lean().exec();
     }
+
+    async deleteTrainsByStationId(stationId: string): Promise<void> {
+        try {
+            await this.model.deleteMany({
+                $or: [{ start_station: stationId }, { end_station: stationId }],
+            }).lean();
+        } catch (error) {
+            throw error;
+        }
+    }
+
 }
 
 export default TrainRepository;

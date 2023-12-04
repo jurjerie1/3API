@@ -9,8 +9,9 @@ export const getAllTrains = async (req: Request, res: Response): Promise<void> =
   const time_of_departure = req.query.time_of_departure as string;
   const start_station = req.query.start_station as string;
   const end_station = req.query.end_station as string;
+  const limit = parseInt(req.query.limit as string, 10);
   try {
-    const trains = await trainRepository.getAllTrains(name,time_of_departure,start_station,end_station);
+    const trains = await trainRepository.getAllTrains(name,time_of_departure,start_station,end_station,limit);
     if (!trains) {
       res.status(404).json({ error: 'Train not found' });
       return;
@@ -39,7 +40,6 @@ export const createTrain = async (req: Request, res: Response): Promise<void> =>
   const train: ITrain = req.body;
   try {
     const newTrain = await trainRepository.createTrain(train);
-    res.status(204);
     res.json(newTrain);
   } catch (error) {
     res.status(500).json({ error: error instanceof Error ? error.message : 'Internal Server Error' });
