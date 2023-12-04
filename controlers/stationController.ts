@@ -4,6 +4,7 @@ import StationRepository from "../repositories/stationRepository";
 
 
 const stationRepository = new StationRepository(Station);
+const trainRepository = new StationRepository(Station);
 
 export const createStation = async (req: Request, res: Response): Promise<void> => {
     const station: IStation = req.body;
@@ -39,9 +40,10 @@ export const updateStation = async (req : Request, res: Response): Promise<void>
     }
 }
 export const deleteStation = async (req : Request, res : Response): Promise<void> => {
-    const id : String = req.params.id;
+    const id : string = req.params.id;
     try{
-        const deleteStation = await stationRepository.deleteStation(id)
+        const deleteTrainfromStation = await trainRepository.deleteStation(id);
+        const deleteStation = await stationRepository.deleteStation(id);
         res.json(deleteStation)
     }
     catch (error){
