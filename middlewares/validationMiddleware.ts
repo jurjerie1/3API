@@ -22,6 +22,12 @@ export const validateGet = (schema: ObjectSchema) => {
 };
 
 export const schemas = {
+  addReservation: Joi.object({ 
+    train_id: Joi.string().required(),
+    //user_id: Joi.string(),
+    number_of_place: Joi.number()
+  }),
+
   getAllTrain: Joi.object({
     name: Joi.string(),
     time_of_departure: Joi.string(),

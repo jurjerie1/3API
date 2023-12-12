@@ -9,7 +9,7 @@ export function generateToken(user: IUser) {
     };
 
     const options = {
-        expiresIn: '1h', // You can adjust the expiration time as needed
+        expiresIn: '10d', // You can adjust the expiration time as needed
     };
 
     return jwt.sign(payload, String(process.env.JWT_KEY), options);

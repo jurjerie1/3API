@@ -19,6 +19,8 @@ const TrainSchema: Schema = new mongoose.Schema({
     time_of_departure: {
         type: Date,
     },
+    number_of_places: Number,
+
 });
 
 const Train = mongoose.model<ITrain>("Train", TrainSchema);

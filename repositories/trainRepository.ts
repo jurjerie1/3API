@@ -59,6 +59,17 @@ class TrainRepository {
         }
     }
 
+    async getNumberOfPlace(id: string): Promise<number> {
+        const train: ITrain | null = await this.model.findOne({ _id: id });
+        const number_of_places: number | undefined = train?.number_of_places as number;
+        if (number_of_places !== undefined) {
+            console.log("nb place == > " + number_of_places )
+            return number_of_places as number;
+        } else {
+            return 0;
+        }
+    }
+
 }
 
 export default TrainRepository;
