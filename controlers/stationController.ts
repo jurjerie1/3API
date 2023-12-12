@@ -39,6 +39,7 @@ export const updateStation = async (req : Request, res: Response): Promise<void>
         res.status(500).json({ error: error instanceof Error ? error.message : 'Internal Server Error' });
     }
 }
+
 export const deleteStation = async (req : Request, res : Response): Promise<void> => {
     const id : string = req.params.id;
     try{
