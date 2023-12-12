@@ -57,3 +57,18 @@ export const getTicketById = async (req: Request, res: Response): Promise<void> 
   }
 
 }
+export const verifyTicketById = async (req: Request, res: Response): Promise<void> => {
+  const id = req.params.id;
+  let valid = false;
+  try {
+    const ticket = await ticketRepository.getTicketById(id);
+    if (!ticket) {
+      res.status(404).json({ error: 'Ticket not found' });
+      return;
+    }
+    valid = await ticketRepository.verifyTicketById(ticket);
+    res.json({ticket, isValid: valid});
+  } catch (error) {
+    res.status(500).json({ error: error instanceof Error? error.message : 'Internal Server Error' });
+  }
+}
