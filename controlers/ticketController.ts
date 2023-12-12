@@ -7,19 +7,15 @@ import {Train} from '../models/Train';
 const ticketRepository = new TicketRepository(Ticket);
 const trainRepository = new TrainRepository(Train);
 
-export const getAllTrains = async (req: Request, res: Response): Promise<void> => {
-  const name = req.query.name as string;
-  const time_of_departure = req.query.time_of_departure as string;
-  const start_station = req.query.start_station as string;
-  const end_station = req.query.end_station as string;
-  const limit = parseInt(req.query.limit as string, 10);
+export const getAllTicketByTrain = async (req: Request, res: Response): Promise<void> => {
+  const id = req.params.id;
   try {
-    const trains = await ticketRepository.getAllTrains(name,time_of_departure,start_station,end_station,limit);
-    if (!trains) {
+    const tickets = await ticketRepository.getTicketByTrain(id);
+    if (!tickets) {
       res.status(404).json({ error: 'Train not found' });
       return;
     }
-    res.json(trains);
+    res.json(tickets);
   } catch (error) {
     res.status(500).json({ error: error instanceof Error ? error.message : 'Internal Server Error' });
   }
@@ -45,4 +41,19 @@ export const addReservation = async (req: Request, res: Response): Promise<void>
   } catch (error) {
     res.status(500).json({ error: error instanceof Error? error.message : 'Internal Server Error' });
   }
+}
+
+export const getTicketById = async (req: Request, res: Response): Promise<void> => {
+  const id = req.params.id;
+  try {
+    const ticket = await ticketRepository.getTicketById(id);
+    if (!ticket) {
+      res.status(404).json({ error: 'Ticket not found' });
+      return;
+    }
+    res.json(ticket);
+  } catch (error) {
+    res.status(500).json({ error: error instanceof Error? error.message : 'Internal Server Error' });
+  }
+
 }

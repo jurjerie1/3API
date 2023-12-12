@@ -31,12 +31,27 @@ class TicketRepository {
         return this.model.find(query).limit(limit).exec();
     }
 
+    
+
     addReservation(ticket : ITicket) {
         return this.model.create(ticket);
     }
 
     getTicketByTrain(id : String) {
-        return this.model.find({ train_id: id });
+        return this.model
+        .find({ train: id })
+        .populate({
+            path: "user",
+            select: ["pseudo", "email"]
+        })
+        .populate({
+            path: "train",
+            select: ["email", "time_of_departure"],
+            populate: [
+                { path: "start_station" },
+                { path: "end_station" }
+            ]
+        });
     }
 
     async getNumberOfReservation(id: String): Promise<number> {
@@ -51,6 +66,22 @@ class TicketRepository {
         }
 
         return totalNumberOfPlaces;
+    }
+
+    async getTicketById(id: String) {
+        return this.model.findOne({ _id: id })
+        .populate({
+            path: "user",
+            select: ["pseudo", "email"]
+        })
+        .populate({
+            path: "train",
+            select: ["email", "time_of_departure"],
+            populate: [
+                { path: "start_station" },
+                { path: "end_station" }
+            ]
+        });;
     }
 }
 

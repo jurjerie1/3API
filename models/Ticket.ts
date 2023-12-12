@@ -4,11 +4,11 @@ import { NewTicket } from "./ITicket";
 export interface ITicket extends NewTicket, Document {}
 
 const StationSchema: Schema = new mongoose.Schema({
-    user_id: {
+    user: {
         type: Schema.Types.ObjectId,
         ref: "User",
     },
-    train_id:{
+    train:{
         type: Schema.Types.ObjectId,
         ref: "Train",
     },
