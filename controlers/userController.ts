@@ -30,16 +30,7 @@ export const getUserById = async (req: Request, res: Response): Promise<void> =>
     }
 };
 
-export const createUser = async (req: Request, res: Response): Promise<void> => {
-    const user: IUser = req.body;
-    try {
-        const newUser = await userRepository.createUser(user);
-        res.status(204);
-        res.json(newUser);
-    } catch (error) {
-        res.status(500).json({ error: error instanceof Error ? error.message : 'Internal Server Error' });
-    }
-};
+
 
 // Suppresion de train
 export const deleteUser = async (req: Request, res: Response): Promise<void> => {

@@ -1,13 +1,32 @@
-// Schéma de validation pour l'enregistrement d'un utilisateur
-import Joi, { Schema, ValidationResult} from "joi";
+import { Request, Response, NextFunction } from 'express';
+import Joi, { ObjectSchema, ValidationResult } from 'joi';
 
-export const validate = {
+export const validatePost = (schema: ObjectSchema) => {
+  return (req: Request, res: Response, next: NextFunction) => {
+    const { error }: ValidationResult = schema.validate(req.body);
+    if (error) {
+      return res.status(400).json({ error: error.details[0].message });
+    }
+    next();
+  };
+};
 
+export const validateGet = (schema: ObjectSchema) => {
+  return (req: Request, res: Response, next: NextFunction) => {
+    const { error }: ValidationResult = schema.validate(req.query);
+    if (error) {
+      return res.status(400).json({ error: error.details[0].message }); 
+    }
+    next();
+  };
+};
+
+export const schemas = {
   getAllTrain: Joi.object({
-      name: Joi.string(),
-      time_of_departure: Joi.string(),
-      start_station: Joi.string(),
-      end_station: Joi.string(),
+    name: Joi.string(),
+    time_of_departure: Joi.string(),
+    start_station: Joi.string(),
+    end_station: Joi.string(),
   }),
 
   getTrainById: Joi.object({
