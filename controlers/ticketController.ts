@@ -22,6 +22,19 @@ export const getAllTicketByTrain = async (req: Request, res: Response): Promise<
   }
 };
 
+export const getAllTicket = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const tickets = await ticketRepository.getAllTciket();
+    if (!tickets) {
+      res.status(404).json({ error: 'Train not found' });
+      return;
+    }
+    res.json(tickets);
+  } catch (error) {
+    res.status(500).json({ error: error instanceof Error ? error.message : 'Internal Server Error' });
+  }
+}
+
 export const addReservation = async (req: Request, res: Response): Promise<void> => {
   const reservation: ITicket = req.body;
   reservation.user = req.body.userData.userId;
@@ -92,3 +105,16 @@ export const verifyTicket = async (ticket: ITicket): Promise<boolean> => {
   }
 }
 
+export const deleteTicket = async (req: Request, res: Response): Promise<void> => {
+  const id = req.query.id as string;
+    try {
+        const train = await ticketRepository.deleteTicket(id);
+        if (!train) {
+            res.status(404).json({ error: 'User not found' });
+            return;
+        }
+        res.json(train);
+    } catch (error) {
+        res.status(500).json({ error: error instanceof Error ? error.message : 'Internal Server Error' });
+    }
+}

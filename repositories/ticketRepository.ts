@@ -11,29 +11,9 @@ class TicketRepository {
         this.model = model;
     }
 
-    getAllTrains(name:string = "", time_of_departure:string ="", start_station:string = "", end_station:string ="", limit:number = 10): Promise<ITicket[]> {
-        console.log(name, time_of_departure);
-        const query: Record<string, any> = {};
-
-        if (name !== "") {
-            query.name = name;
-        }
-        if (time_of_departure !== "") {
-            query.time_of_departure = time_of_departure;
-        }
-
-        if (start_station !== "") {
-            query.start_station = start_station;
-        }
-
-        if (end_station !== "") {
-            query.end_station = end_station;
-        }
-
-        return this.model.find(query).limit(limit).exec();
+    getAllTciket(): Promise<ITicket[]> {
+        return this.model.find().exec();
     }
-
-    
 
     addReservation(ticket : ITicket) {
         return this.model.create(ticket);
@@ -84,6 +64,10 @@ class TicketRepository {
                 { path: "end_station" }
             ]
         });
+    }
+
+    async deleteTicket(id: String) {
+        return this.model.deleteOne({ _id: id });
     }
 }
 

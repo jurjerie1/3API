@@ -9,7 +9,7 @@ const stationRoutes = Router();
 
 stationRoutes.get('/', getAllStations);
 stationRoutes.put("/:id", auth, admin, updateStation)
-stationRoutes.delete("/:id"/*, upload.single('image')*/, auth, admin, deleteStation)
+stationRoutes.delete("/:id", auth, admin, deleteStation)
 stationRoutes.post('/', auth, admin, createStation);
 
 

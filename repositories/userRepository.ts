@@ -26,8 +26,8 @@ class UserRepository {
         return this.model.findByIdAndDelete(id).lean().exec();
     }
 
-    updateUser(id: string, train: IUser): Promise<IUser | null> {
-        return this.model.findByIdAndUpdate(id, train, { new: true }).lean().exec();
+    updateUser(id: string, user: IUser): Promise<IUser | null> {
+        return this.model.findByIdAndUpdate(id, user).lean().exec();
     }
 
     async findUserByEmailOrUsername(email: String, pseudo: String): Promise<IUser | null> {

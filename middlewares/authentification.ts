@@ -14,7 +14,7 @@ export const auth = (req: Request, res: Response, next: NextFunction): void => {
 
         const token = authorizationHeader.split(' ')[1];
         const decodedToken: IDecodedToken = jwt.verify(token, String(process.env.JWT_KEY)) as IDecodedToken;
-
+        console.log(decodedToken);
         if (!decodedToken || !decodedToken.userId && !decodedToken.role) {
             throw new Error('Invalid token');
         }

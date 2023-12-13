@@ -24,26 +24,17 @@ export const validateGet = (schema: ObjectSchema) => {
 export const schemas = {
   addReservation: Joi.object({ 
     train_id: Joi.string().required(),
-    //user_id: Joi.string(),
-    number_of_place: Joi.number()
+    number_of_place: Joi.number().default(1),
   }),
 
-  getAllTrain: Joi.object({
-    name: Joi.string(),
-    time_of_departure: Joi.string(),
-    start_station: Joi.string(),
-    end_station: Joi.string(),
-  }),
-
-  getTrainById: Joi.object({
-    id: Joi.number().required(),
-  }),
-
-  createUser: Joi.object({
+  register: Joi.object({
     email: Joi.string().email().required(),
     username: Joi.string().required(),
     password: Joi.string().required(),
-    role: Joi.string().valid('user', 'employee', 'admin').default('user'),
+  }),
+  login: Joi.object({
+    email: Joi.string().email().required(),
+    password: Joi.string().required(),
   }),
 
   updateUser: Joi.object({
@@ -56,16 +47,16 @@ export const schemas = {
     name: Joi.string().required(),
     departureStation: Joi.string().required(),
     arrivalStation: Joi.string().required(),
-    departureTime: Joi.string().required(),
-    availableSeats: Joi.number().default(50),
+    time_of_departure: Joi.string().required(),
+    time_of_arrived: Joi.number().required(),
   }),
 
   updateTrain: Joi.object({
-    name: Joi.string(),
-    departureStation: Joi.string(),
-    arrivalStation: Joi.string(),
-    departureTime: Joi.string(),
-    availableSeats: Joi.number().default(50),
+    name: Joi.string().required(),
+    departureStation: Joi.string().required(),
+    arrivalStation: Joi.string().required(),
+    time_of_departure: Joi.string().required(),
+    time_of_arrived: Joi.number().required(),
   }),
 
   createStation: Joi.object({
@@ -80,14 +71,5 @@ export const schemas = {
     openingTime: Joi.string(),
     closingTime: Joi.string(),
     image: Joi.string(),
-  }),
-
-  bookTicket: Joi.object({
-    userId: Joi.string().required(),
-    trainId: Joi.string().required(),
-  }),
-
-  validateTicket: Joi.object({
-    bookingId: Joi.string().required(),
   }),
 };
