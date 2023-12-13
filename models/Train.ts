@@ -19,6 +19,9 @@ const TrainSchema: Schema = new mongoose.Schema({
     time_of_departure: {
         type: Date,
     },
+    time_of_arrived: {
+        type: Date,
+    },
     number_of_places: Number,
 
 });

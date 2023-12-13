@@ -2,8 +2,8 @@ import { Types } from "mongoose";
 
 
 export interface NewTicket {
-    user_id: string;
-    train_id: string;
+    user: string;
+    train: string;
     number_of_place: Number | 1;
 }
 

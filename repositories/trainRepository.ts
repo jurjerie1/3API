@@ -69,7 +69,7 @@ class TrainRepository {
             return 0;
         }
     }
-  
+
 }
 
 export default TrainRepository;

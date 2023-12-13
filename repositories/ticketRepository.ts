@@ -2,6 +2,7 @@
 import { Model, Document } from 'mongoose';
 import { ITicket } from '../models/Ticket';
 import { Train } from '../models/ITrain';
+import { ITrain } from '../models/Train';
 
 class TicketRepository {
     private model: Model<Document & ITicket>;
@@ -82,33 +83,8 @@ class TicketRepository {
                 { path: "start_station" },
                 { path: "end_station" }
             ]
-        });;
+        });
     }
-    
-    async verifyTicketById(ticket: ITicket): Promise<boolean> {
-        const train: Train | null = await this.model.findOne({ _id: ticket.train_id });
-        
-        if (!train) {
-            // Le train n'existe pas
-            return false;
-        }
-        
-        const departureDate = new Date(train.time_of_departure);
-        const currentDate = new Date();
-        
-        // Comparez les années, les mois et les jours
-        if (
-            departureDate.getFullYear() === currentDate.getFullYear() &&
-            departureDate.getMonth() === currentDate.getMonth() &&
-            departureDate.getDate() === currentDate.getDate()
-        ) {
-            // La date de départ du train est la même que la date actuelle
-            return true;
-        }
-        
-        // La date de départ du train n'est pas la même que la date actuelle
-        return false;
-        }
 }
 
 export default TicketRepository;
