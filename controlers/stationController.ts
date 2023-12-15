@@ -37,7 +37,7 @@ export const createStation = async (req: Request, res: Response): Promise<void> 
                 .toFile(`public/uploads/${image.filename}.jpg`); // Spécifiez le chemin où vous souhaitez sauvegarder l'image redimensionnée
 
             // Mettre à jour le chemin de l'image dans la base de données
-            station.image = `public/uploads/${image.filename}.jpg`;
+            station.image = `localhost:5000/public/uploads/${image.filename}.jpg`;
         } else {
             // L'image est déjà de la bonne taille, utiliser le chemin existant
             station.image = image.filename;

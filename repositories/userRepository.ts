@@ -11,11 +11,11 @@ class UserRepository {
     }
 
     getAllUsers(): Promise<IUser[]> {
-        return this.model.find();
+        return this.model.find().select('-password').exec();
     }
 
     getUserById(id: string): Promise<IUser | null> {
-        return this.model.findById(id).exec();
+        return this.model.findById(id, "-password").exec();
     }
 
     createUser(user: IUser): Promise<IUser> {

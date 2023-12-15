@@ -5,6 +5,7 @@ import { User, IUser } from '../models/User';
 import UserRepository from '../repositories/userRepository';
 import { generateToken } from '../utils/tools'
 import bcrypt from "bcrypt";
+import { CustomRequest } from '../utils/CustomRequest';
 
 const userRepository = new UserRepository(User);
 
@@ -19,57 +20,61 @@ export const getAllUser = async (req: Request, res: Response): Promise<void> => 
 };
 
 
-export const getUserById = async (req: Request, res: Response): Promise<void> => {
-    let id  = req.params.id;
-    if (req.body.userData.role > 1 && req.params.id !== undefined) {
-        id  = req.params.id;
+export const getUserById = async (req: CustomRequest, res: Response): Promise<void> => {
+    let id: string = req.params.id;
+
+    if (req.userData && req.userData.role !== undefined && req.userData.role > "1" && id !== undefined) {
+        id = req.params.id;
     }else{
-        id  = req.body.userData.userId;
+        id = req.userData?.userId as string;
     }
-    try {
-        const user = await userRepository.getUserById(id);
-        if (!user) {
-            res.status(404).json({ error: 'User not found' });
+        try {
+            const user = await userRepository.getUserById(id);
+            if (!user) {
+                res.status(404).json({ error: 'User not found' });
+                return;
+            }
+            res.json(user);
+            return;
+        } catch (error) {
+            res.status(500).json({ error: error instanceof Error ? error.message : 'Internal Server Error' });
             return;
         }
-        res.json(user);
-    } catch (error) {
-        res.status(500).json({ error: error instanceof Error ? error.message : 'Internal Server Error' });
-    }
 };
 
 
-export const updateUser = async (req: Request, res: Response): Promise<void> => {
-    const user : IUser = req.body;
-    let id: string; // Correction : Utilisez "string" au lieu de "String" pour déclarer une chaîne de caractères.
+export const updateUser = async (req: CustomRequest, res: Response): Promise<void> => {
+    const user: IUser = req.body;
+    let id: string;
 
-    if (req.body.userData.role > 1 && req.params.id !== undefined) {
+    if (req.userData && req.userData.role > "1" && req.params.id !== undefined) {
         id = req.params.id;
+    } else if (req.userData && req.userData.userId) {
+        id = req.userData.userId;
     } else {
-        id = req.body.userData.userId;
+        // Gérez le cas où l'ID de l'utilisateur n'est pas défini.
+        res.status(400).json({ error: 'Invalid request' });
+        return;
     }
 
     try {
-        console.log('User ID to update:', id); // Ajoutez cette ligne pour afficher l'ID de l'utilisateur à mettre à jour.
         const updatedUser = await userRepository.updateUser(id, user);
-        console.log('Updated User:', updatedUser); // Ajoutez cette ligne pour afficher l'utilisateur mis à jour.
 
         if (!updatedUser) {
-            console.log('User not found'); // Ajoutez cette ligne pour indiquer que l'utilisateur n'a pas été trouvé.
             res.status(404).json({ error: 'User not found' });
             return;
         }
 
         res.json(updatedUser);
     } catch (error) {
-        console.error('Error:', error); // Ajoutez cette ligne pour afficher des informations sur l'erreur.
         res.status(500).json({ error: error instanceof Error ? error.message : 'Internal Server Error' });
     }
 };
 
 
-export const deleteUser = async (req: Request, res: Response): Promise<void> => {
-    let id = req.body.userData.userId;
+
+export const deleteUser = async (req: CustomRequest, res: Response): Promise<void> => {
+    let id = req.userData?.userId as string;
     try {
         const train = await userRepository.deleteUser(id);
         if (!train) {

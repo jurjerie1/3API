@@ -31,6 +31,7 @@ export const getAllTicket = async (req: Request, res: Response): Promise<void> =
       res.status(404).json({ error: 'Train not found' });
       return;
     }
+    console.log(tickets)
     res.json(tickets);
   } catch (error) {
     res.status(500).json({ error: error instanceof Error ? error.message : 'Internal Server Error' });

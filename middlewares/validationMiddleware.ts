@@ -28,7 +28,7 @@ export const schemas = {
   }),
   register: Joi.object({
     email: Joi.string().email().required(),
-    username: Joi.string().required(),
+    pseudo: Joi.string().required(),
     password: Joi.string().required(),
   }),
   login: Joi.object({
@@ -53,10 +53,11 @@ export const schemas = {
 
   updateTrain: Joi.object({
     name: Joi.string().required(),
-    departureStation: Joi.string().required(),
-    arrivalStation: Joi.string().required(),
-    time_of_departure: Joi.string().required(),
-    time_of_arrived: Joi.number().required(),
+    start_station: Joi.string().required(),
+    end_station: Joi.string().required(),
+    time_of_departure: Joi.date().required(),
+    time_of_arrived: Joi.date().required(),
+    number_of_places: Joi.number().default(1),
   }),
 
   createStation: Joi.object({

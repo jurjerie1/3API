@@ -12,7 +12,7 @@ class TicketRepository {
     }
 
     getAllTciket(): Promise<ITicket[]> {
-        return this.model.find().exec();
+        return  this.model.find().exec();
     }
 
     addReservation(ticket : ITicket) {
