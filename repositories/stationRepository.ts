@@ -21,9 +21,15 @@ class StationRepository {
         return this.model.find(query);
     }
 
-    createStation(station: IStation): Promise<IStation> {
-        return this.model.create(station);
+    async createStation(station: IStation): Promise<IStation> {
+        try {
+            const newStation = await this.model.create(station);
+            return newStation;
+        } catch (error) {
+            throw error;
+        }
     }
+    
 
 
     updateStation(id: String, station: IStation): Promise<IStation | null>{

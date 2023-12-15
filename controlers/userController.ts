@@ -1,11 +1,35 @@
+/**
+ * @swagger
+ * tags:
+ *   name: Users
+ *   description: Operations related to users
+ */
+
 import { Request, Response } from 'express';
-import TrainRepository from '../repositories/trainRepository';
 import { User, IUser } from '../models/User';
 import UserRepository from '../repositories/userRepository';
 import { generateToken } from '../utils/tools'
 import bcrypt from "bcrypt";
 
 const userRepository = new UserRepository(User);
+
+/**
+ * @swagger
+ * /api/users:
+ *   get:
+ *     summary: Get all users
+ *     tags: [Users]
+ *     responses:
+ *       '200':
+ *         description: A list of users
+ *         content:
+ *           application/json:
+ *             example:
+ *               - id: "1"
+ *                 username: "User1"
+ *                 email: "user1@example.com"
+ *                 role: 0
+ */
 
 export const getAllUser = async (req: Request, res: Response): Promise<void> => {
     try {
@@ -15,6 +39,31 @@ export const getAllUser = async (req: Request, res: Response): Promise<void> => 
         res.status(500).json({ error: error instanceof Error ? error.message : 'Internal Server Error' });
     }
 };
+
+/**
+ * @swagger
+ * /api/users/{id}:
+ *   get:
+ *     summary: Get a user by ID
+ *     tags: [Users]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: ID of the user to get
+ *     responses:
+ *       '200':
+ *         description: The user details
+ *         content:
+ *           application/json:
+ *             example:
+ *               id: "1"
+ *               username: "User1"
+ *               email: "user1@example.com"
+ *               role: 0
+ */
 
 export const getUserById = async (req: Request, res: Response): Promise<void> => {
     let id  = req.params.id;
@@ -34,6 +83,39 @@ export const getUserById = async (req: Request, res: Response): Promise<void> =>
         res.status(500).json({ error: error instanceof Error ? error.message : 'Internal Server Error' });
     }
 };
+
+/**
+ * @swagger
+ * /api/users/{id}:
+ *   put:
+ *     summary: Update a user by ID
+ *     tags: [Users]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: ID of the user to update
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           example:
+ *             username: "UpdatedUser"
+ *             email: "updateduser@example.com"
+ *             role: 1
+ *     responses:
+ *       '200':
+ *         description: Successfully updated the user
+ *         content:
+ *           application/json:
+ *             example:
+ *               id: "1"
+ *               username: "UpdatedUser"
+ *               email: "updateduser@example.com"
+ *               role: 1
+ */
 
 export const updateUser = async (req: Request, res: Response): Promise<void> => {
     const user : IUser = req.body;
@@ -63,9 +145,31 @@ export const updateUser = async (req: Request, res: Response): Promise<void> => 
     }
 };
 
+/**
+ * @swagger
+ * /api/users/{id}:
+ *   delete:
+ *     summary: Delete a user by ID
+ *     tags: [Users]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: ID of the user to delete
+ *     responses:
+ *       '200':
+ *         description: Successfully deleted the user
+ *         content:
+ *           application/json:
+ *             example:
+ *               id: "1"
+ *               username: "DeletedUser"
+ *               email: "deleteduser@example.com"
+ *               role: 0
+ */
 
-
-// Suppresion de train
 export const deleteUser = async (req: Request, res: Response): Promise<void> => {
     let id = req.body.userData.userId;
     try {
@@ -79,6 +183,35 @@ export const deleteUser = async (req: Request, res: Response): Promise<void> => 
         res.status(500).json({ error: error instanceof Error ? error.message : 'Internal Server Error' });
     }
 };
+
+/**
+ * @swagger
+ * /api/users/login:
+ *   post:
+ *     summary: Login a user
+ *     tags: [Users]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           example:
+ *             email: "admin@admin.com"
+ *             password: "admin@admin.com"
+ *     responses:
+ *       '200':
+ *         description: Successfully logged in
+ *         content:
+ *           application/json:
+ *             example:
+ *               user:
+ *                 id: "1"
+ *                 email: "user@example.com"
+ *                 pseudo: "User1"
+ *                 password: ""
+ *                 role: 0
+ *                 __v: 0
+ *               token: "tokenString"
+ */
 
 export const login = async (req: Request, res: Response): Promise<void> => {
     try {
@@ -98,6 +231,33 @@ export const login = async (req: Request, res: Response): Promise<void> => {
     }
 };
 
+/**
+ * @swagger
+ * /api/users/register:
+ *   post:
+ *     summary: Register a new user
+ *     tags: [Users]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           example:
+ *             username: "NewUser"
+ *             email: "newuser@example.com"
+ *             password: "password"
+ *     responses:
+ *       '201':
+ *         description: Successfully registered a new user
+ *         content:
+ *           application/json:
+ *             example:
+ *               newUser:
+ *                 id: "2"
+ *                 username: "NewUser"
+ *                 email: "newuser@example.com"
+ *                 role: 0
+ *               token: "tokenString"
+ */
 export const register = async (req: Request, res: Response): Promise<void> => {
     try {
         const user: IUser = req.body;

@@ -58,7 +58,6 @@ class TrainRepository {
             throw error;
         }
     }
-
     async getNumberOfPlace(id: string): Promise<number> {
         const train: ITrain | null = await this.model.findOne({ _id: id });
         const number_of_places: number | undefined = train?.number_of_places as number;

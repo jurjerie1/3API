@@ -8,7 +8,7 @@ const StationSchema: Schema = new mongoose.Schema({
     name: String, 
     open_hour: String, 
     close_hour: String, 
-    image: String,
+    image: String
 });
 const Station = mongoose.model<IStation>("Station", StationSchema);
 
