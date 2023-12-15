@@ -1,10 +1,11 @@
-// authMiddleware.ts
-
 import { Request, Response, NextFunction } from 'express';
 import { IDecodedToken } from '../models/IDecodedToken';
 import jwt from 'jsonwebtoken';
+import {CustomRequest} from "../utils/CustomRequest";
 
-export const auth = (req: Request, res: Response, next: NextFunction): void => {
+
+
+export const auth = (req: CustomRequest, res: Response, next: NextFunction): void => {
     try {
         const authorizationHeader = req.headers.authorization;
 
@@ -15,12 +16,11 @@ export const auth = (req: Request, res: Response, next: NextFunction): void => {
         const token = authorizationHeader.split(' ')[1];
         const decodedToken: IDecodedToken = jwt.verify(token, String(process.env.JWT_KEY)) as IDecodedToken;
         console.log(decodedToken);
-        if (!decodedToken || !decodedToken.userId && !decodedToken.role) {
+        if (!decodedToken || !decodedToken.userId) {
             throw new Error('Invalid token');
         }
-
         // Attach the decoded user information to the request object
-        req.body.userData = decodedToken;
+        req.userData = decodedToken;
 
         next();
     } catch (error) {
@@ -28,19 +28,22 @@ export const auth = (req: Request, res: Response, next: NextFunction): void => {
     }
 };
 
-export const employe = (req: Request, res: Response, next: NextFunction): void => {
-    if (req.body.userData.role > 0){
-        next();
-        return;
-    }
-    res.status(401).json({ message: 'Only acces for authorized people' });
+export const employe = (req: CustomRequest, res: Response, next: NextFunction): void => {
+    const userRole = Number(req.userData?.role);
 
-}
-export const admin = (req: Request, res: Response, next: NextFunction): void => {
-    if (req.body.userData.role > 1){
+    if (!isNaN(userRole) && userRole > 0) {
         next();
-        return;
+    } else {
+        res.status(401).json({ message: 'Only access for authorized people' });
     }
-    res.status(401).json({ message: 'Only acces for authorized people' });
+};
 
-}
+export const admin = (req: CustomRequest, res: Response, next: NextFunction): void => {
+    const userRole = Number(req.userData?.role);
+
+    if (!isNaN(userRole) && userRole > 1) {
+        next();
+    } else {
+        res.status(401).json({ message: 'Only access for authorized people' });
+    }
+};

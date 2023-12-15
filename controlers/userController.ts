@@ -1,3 +1,5 @@
+
+
 import { Request, Response } from 'express';
 import { User, IUser } from '../models/User';
 import UserRepository from '../repositories/userRepository';
@@ -5,6 +7,8 @@ import { generateToken } from '../utils/tools'
 import bcrypt from "bcrypt";
 
 const userRepository = new UserRepository(User);
+
+
 export const getAllUser = async (req: Request, res: Response): Promise<void> => {
     try {
         const users = await userRepository.getAllUsers();
@@ -13,6 +17,7 @@ export const getAllUser = async (req: Request, res: Response): Promise<void> => 
         res.status(500).json({ error: error instanceof Error ? error.message : 'Internal Server Error' });
     }
 };
+
 
 export const getUserById = async (req: Request, res: Response): Promise<void> => {
     let id  = req.params.id;
@@ -32,6 +37,7 @@ export const getUserById = async (req: Request, res: Response): Promise<void> =>
         res.status(500).json({ error: error instanceof Error ? error.message : 'Internal Server Error' });
     }
 };
+
 
 export const updateUser = async (req: Request, res: Response): Promise<void> => {
     const user : IUser = req.body;
@@ -60,6 +66,7 @@ export const updateUser = async (req: Request, res: Response): Promise<void> => 
         res.status(500).json({ error: error instanceof Error ? error.message : 'Internal Server Error' });
     }
 };
+
 
 export const deleteUser = async (req: Request, res: Response): Promise<void> => {
     let id = req.body.userData.userId;
@@ -92,7 +99,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
         res.status(500).json({ error: 'Internal Server Error' });
     }
 };
-       
+
 export const register = async (req: Request, res: Response): Promise<void> => {
     try {
         const user: IUser = req.body;

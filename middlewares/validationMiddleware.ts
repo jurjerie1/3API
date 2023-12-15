@@ -23,10 +23,9 @@ export const validateGet = (schema: ObjectSchema) => {
 
 export const schemas = {
   addReservation: Joi.object({ 
-    train_id: Joi.string().required(),
+    train: Joi.string().required(),
     number_of_place: Joi.number().default(1),
   }),
-
   register: Joi.object({
     email: Joi.string().email().required(),
     username: Joi.string().required(),
@@ -45,10 +44,11 @@ export const schemas = {
 
   createTrain: Joi.object({
     name: Joi.string().required(),
-    departureStation: Joi.string().required(),
-    arrivalStation: Joi.string().required(),
-    time_of_departure: Joi.string().required(),
-    time_of_arrived: Joi.number().required(),
+    start_station: Joi.string().required(),
+    end_station: Joi.string().required(),
+    time_of_departure: Joi.date().required(),
+    time_of_arrived: Joi.date().required(),
+    number_of_places: Joi.number().default(1),
   }),
 
   updateTrain: Joi.object({
@@ -63,7 +63,7 @@ export const schemas = {
     name: Joi.string().required(),
     openingTime: Joi.string().required(),
     closingTime: Joi.string().required(),
-    image: Joi.string(),
+    image: Joi.binary(),
   }),
 
   updateStation: Joi.object({

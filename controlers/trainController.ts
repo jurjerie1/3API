@@ -1,8 +1,10 @@
+
 import { Request, Response } from 'express';
 import TrainRepository from '../repositories/trainRepository';
 import { Train, ITrain } from '../models/Train';
 
 const trainRepository = new TrainRepository(Train);
+
 
 export const getAllTrains = async (req: Request, res: Response): Promise<void> => {
   const name = req.query.name as string;
@@ -22,6 +24,7 @@ export const getAllTrains = async (req: Request, res: Response): Promise<void> =
   }
 };
 
+
 export const getTrainById = async (req: Request, res: Response): Promise<void> => {
   const { id } = req.params;
   try {
@@ -36,6 +39,7 @@ export const getTrainById = async (req: Request, res: Response): Promise<void> =
   }
 };
 
+
 export const createTrain = async (req: Request, res: Response): Promise<void> => {
   
   const train: ITrain = req.body;
@@ -46,6 +50,7 @@ export const createTrain = async (req: Request, res: Response): Promise<void> =>
     res.status(500).json({ error: error instanceof Error ? error.message : 'Internal Server Error' });
   }
 };
+
 
 export const deleteTrain = async (req: Request, res: Response): Promise<void> => {
   const { id } = req.params;
