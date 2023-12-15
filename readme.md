@@ -3,11 +3,12 @@
 Suivez ces étapes pour installer l'API RailRoad sur votre machine.
 
 **Prendre le dossier API sans test (avec test peut avoir des bugs) , les tests Postman à la main sont conseillés **
-
+```
 email admin:
 admin@admin.com
 password:
 admin@admin.com
+```
 
 ## Sommaire
 
