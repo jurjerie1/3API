@@ -6,9 +6,9 @@ import trainRoutes from "./routes/trainRoutes";
 import stationRoutes from "./routes/stationRoutes";
 import userRoutes from "./routes/userRoutes";
 import ticketRoutes from './routes/ticketRoutes';
-import swaggerJsdoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
-import swaggerOptions from './swaggerOptions'; // Importez le fichier de configuration
+import YAML from 'yamljs';
+import path from 'path';
 connectDB();
 
 const app = express();
@@ -16,8 +16,7 @@ app.use(cors());
 app.use(express.json());
 app.use("/public", express.static('./public/'));
 
-// Ajoutez cette partie pour Swagger
-const specs = swaggerJsdoc(swaggerOptions);
+const specs = YAML.load(path.join(__dirname, './swagger.yaml'));
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 
 app.use('/api/trains', trainRoutes);

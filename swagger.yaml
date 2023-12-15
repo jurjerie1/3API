@@ -1,0 +1,471 @@
+openapi: 3.0.0
+info:
+  title: Votre API
+  version: 1.0.0
+  description: Documentation de votre API
+servers:
+  - url: http://localhost:5000
+    description: Serveur local
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+security:
+  - bearerAuth: []
+
+tags:
+  - name: Users
+    description: Operations related to users
+  - name: Stations
+    description: Operations related to stations
+  - name: Tickets
+    description: Operations related to tickets
+  - name: Trains
+    description: Operations related to trains
+
+paths:
+  /api/users:
+    get:
+      summary: Get all users
+      tags: [Users]
+      responses:
+        '200':
+          description: A list of users
+          content:
+            application/json:
+              example:
+                - id: "1"
+                  username: "User1"
+                  email: "user1@example.com"
+                  role: 0
+
+  /api/users/{id}:
+    get:
+      summary: Get a user by ID
+      tags: [Users]
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: ID of the user to get
+      responses:
+        '200':
+          description: The user details
+          content:
+            application/json:
+              example:
+                id: "1"
+                username: "User1"
+                email: "user1@example.com"
+                role: 0
+    put:
+      summary: Update a user by ID
+      tags: [Users]
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: ID of the user to update
+      requestBody:
+        required: true
+        content:
+          application/json:
+            example:
+              username: "UpdatedUser"
+              email: "updateduser@example.com"
+              role: 1
+      responses:
+        '200':
+          description: Successfully updated the user
+          content:
+            application/json:
+              example:
+                id: "1"
+                username: "UpdatedUser"
+                email: "updateduser@example.com"
+                role: 1
+    delete:
+      summary: Delete a user by ID
+      tags: [Users]
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: ID of the user to delete
+      responses:
+        '200':
+          description: Successfully deleted the user
+          content:
+            application/json:
+              example:
+                id: "1"
+                username: "DeletedUser"
+                email: "deleteduser@example.com"
+                role: 0
+  /api/users/login:
+    post:
+      summary: Login a user
+      tags: [Users]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            example:
+              email: "admin@admin.com"
+              password: "admin@admin.com"
+      responses:
+        '200':
+          description: Successfully logged in
+          content:
+            application/json:
+              example:
+                user:
+                  id: "1"
+                  email: "user@example.com"
+                  pseudo: "User1"
+                  password: ""
+                  role: 0
+                  __v: 0
+                token: "tokenString"
+
+  /api/users/register:
+    post:
+      summary: Register a new user
+      tags: [Users]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            example:
+              username: "NewUser"
+              email: "newuser@example.com"
+              password: "password"
+      responses:
+        '201':
+          description: Successfully registered a new user
+          content:
+            application/json:
+              example:
+                newUser:
+                  id: "2"
+                  username: "NewUser"
+                  email: "newuser@example.com"
+                  role: 0
+                token: "tokenString"
+  /api/stations:
+    post:
+      summary: Create a new station
+      tags: [Stations]
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            example:
+              name: "New Station"
+              open_hour: "08:00"
+              close_hour: "20:00"
+              image: "path/to/image.jpg"
+      responses:
+        '201':
+          description: Successfully created a new station
+          content:
+            application/json:
+              example:
+                id: "2"
+                name: "New Station"
+                open_hour: "08:00"
+                close_hour: "20:00"
+                image: "path/to/image.jpg"
+
+    get:
+      summary: Get all stations
+      tags: [Stations]
+      parameters:
+        - in: query
+          name: name
+          schema:
+            type: string
+          description: Name of the station to filter by
+      responses:
+        '200':
+          description: A list of stations
+          content:
+            application/json:
+              example:
+                - id: "1"
+                  name: "Station 1"
+                  open_hour: "08:00"
+                  close_hour: "20:00"
+                  image: "public/uploads/image.jpg"
+
+  /api/stations/{id}:
+    put:
+      summary: Update a station by ID
+      tags: [Stations]
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: ID of the station to update
+      requestBody:
+        required: true
+        content:
+          application/json:
+            example:
+              name: "Updated Station"
+              open_hour: "09:00"
+              close_hour: "21:00"
+              image: "path/to/updated_image.jpg"
+      responses:
+        '200':
+          description: Successfully updated the station
+          content:
+            application/json:
+              example:
+                id: "2"
+                name: "Updated Station"
+                open_hour: "09:00"
+                close_hour: "21:00"
+                image: "path/to/updated_image.jpg"
+
+    delete:
+      summary: Delete a station by ID
+      tags: [Stations]
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: ID of the station to delete
+      responses:
+        '200':
+          description: Successfully deleted the station
+          content:
+            application/json:
+              example:
+                id: "2"
+                name: "Deleted Station"
+                open_hour: "08:00"
+                close_hour: "20:00"
+                image: "path/to/deleted_image.jpg"
+
+  /api/tickets/train/{id}:
+    get:
+      summary: Get all tickets for a specific train
+      tags: [Tickets]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: ID of the train
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+
+  /api/tickets:
+    get:
+      summary: Get all tickets
+      tags: [Tickets]
+      responses:
+        '200':
+          description: Successful response
+
+    post:
+      summary: Add a reservation
+      tags: [Tickets]
+      requestBody:
+        description: Ticket details
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Ticket'
+      responses:
+        '200':
+          description: Successful response
+        '404':
+          description: Reservation is not possible
+
+  /api/tickets/{id}:
+    get:
+      summary: Get a ticket by ID
+      tags: [Tickets]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: ID of the ticket
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+
+    delete:
+      summary: Delete a ticket by ID
+      tags: [Tickets]
+      parameters:
+        - in: query
+          name: id
+          required: true
+          description: ID of the ticket
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+        '404':
+          description: User not found
+
+  /api/tickets/verify/{id}:
+    get:
+      summary: Verify a ticket by ID
+      tags: [Tickets]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: ID of the ticket
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+
+  /api/trains:
+    get:
+      summary: Get all trains
+      tags: [Trains]
+      parameters:
+        - name: name
+          in: query
+          description: Name of the train
+          schema:
+            type: string
+        - name: time_of_departure
+          in: query
+          description: Time of departure
+          schema:
+            type: string
+        - name: start_station
+          in: query
+          description: Start station
+          schema:
+            type: string
+        - name: end_station
+          in: query
+          description: End station
+          schema:
+            type: string
+        - name: limit
+          in: query
+          description: Limit of results
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Successfully retrieved trains
+          content:
+            application/json:
+              example: [{"name": "Train1", "time_of_departure": "2023-12-01T08:00:00.000Z", "start_station": "StationA", "end_station": "StationB"}]
+        404:
+          description: Trains not found
+
+    post:
+      summary: Create a new train
+      tags: [Trains]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            example: {"name": "Train1", "time_of_departure": "2023-12-01T08:00:00.000Z", "start_station": "StationA", "end_station": "StationB"}
+      responses:
+        201:
+          description: Successfully created train
+          content:
+            application/json:
+              example: {"name": "Train1", "time_of_departure": "2023-12-01T08:00:00.000Z", "start_station": "StationA", "end_station": "StationB"}
+        500:
+          description: Internal Server Error
+
+  /api/trains/{id}:
+    get:
+      summary: Get train by ID
+      tags: [Trains]
+      parameters:
+        - name: id
+          in: path
+          description: ID of the train
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Successfully retrieved train
+          content:
+            application/json:
+              example: {"name": "Train1", "time_of_departure": "2023-12-01T08:00:00.000Z", "start_station": "StationA", "end_station": "StationB"}
+        404:
+          description: Train not found
+
+    delete:
+      summary: Delete train by ID
+      tags: [Trains]
+      parameters:
+        - name: id
+          in: path
+          description: ID of the train
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Successfully deleted train
+          content:
+            application/json:
+              example: {"name": "Train1", "time_of_departure": "2023-12-01T08:00:00.000Z", "start_station": "StationA", "end_station": "StationB"}
+        404:
+          description: Train not found
+        500:
+          description: Internal Server Error
+
+    put:
+      summary: Update train by ID
+      tags: [Trains]
+      parameters:
+        - name: id
+          in: path
+          description: ID of the train
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            example: {"name": "UpdatedTrain", "time_of_departure": "2023-12-01T10:00:00.000Z", "start_station": "StationB", "end_station": "StationC"}
+      responses:
+        200:
+          description: Successfully updated train
+          content:
+            application/json:
+              example: {"name": "UpdatedTrain", "time_of_departure": "2023-12-01T10:00:00.000Z", "start_station": "StationB", "end_station": "StationC"}
+        404:
+          description: Train not found
+        500:
+          description: Internal Server Error

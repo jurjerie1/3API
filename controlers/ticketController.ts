@@ -1,10 +1,3 @@
-/**
- * @swagger
- * tags:
- *   name: Tickets
- *   description: Operations related to tickets
- */
-
 import { Request, Response } from 'express';
 import TicketRepository from '../repositories/ticketRepository';
 import { ITicket, Ticket } from '../models/Ticket';
@@ -13,24 +6,6 @@ import {Train} from '../models/Train';
 
 const ticketRepository = new TicketRepository(Ticket);
 const trainRepository = new TrainRepository(Train);
-
-/**
- * @swagger
- * /api/tickets/train/{id}:
- *   get:
- *     summary: Get all tickets for a specific train
- *     tags: [Tickets]
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         description: ID of the train
- *         schema:
- *           type: string
- *     responses:
- *       '200':
- *         description: Successful response
- */
 
 export const getAllTicketByTrain = async (req: Request, res: Response): Promise<void> => {
   const id = req.params.id;
@@ -46,17 +21,6 @@ export const getAllTicketByTrain = async (req: Request, res: Response): Promise<
   }
 };
 
-/**
- * @swagger
- * /api/tickets:
- *   get:
- *     summary: Get all tickets
- *     tags: [Tickets]
- *     responses:
- *       '200':
- *         description: Successful response
- */
-
 export const getAllTicket = async (req: Request, res: Response): Promise<void> => {
   try {
     const tickets = await ticketRepository.getAllTciket();
@@ -69,26 +33,6 @@ export const getAllTicket = async (req: Request, res: Response): Promise<void> =
     res.status(500).json({ error: error instanceof Error ? error.message : 'Internal Server Error' });
   }
 }
-
-/**
- * @swagger
- * /api/tickets/reservation:
- *   post:
- *     summary: Add a reservation
- *     tags: [Tickets]
- *     requestBody:
- *       description: Ticket details
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/Ticket'
- *     responses:
- *       '200':
- *         description: Successful response
- *       '404':
- *         description: Reservation is not possible
- */
 
 export const addReservation = async (req: Request, res: Response): Promise<void> => {
   const reservation: ITicket = req.body;
@@ -112,25 +56,6 @@ export const addReservation = async (req: Request, res: Response): Promise<void>
   }
 }
 
-
-/**
- * @swagger
- * /api/tickets/{id}:
- *   get:
- *     summary: Get a ticket by ID
- *     tags: [Tickets]
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         description: ID of the ticket
- *         schema:
- *           type: string
- *     responses:
- *       '200':
- *         description: Successful response
- */
-
 export const getTicketById = async (req: Request, res: Response): Promise<void> => {
   const id = req.params.id;
   try {
@@ -145,24 +70,6 @@ export const getTicketById = async (req: Request, res: Response): Promise<void> 
   }
 
 }
-
-/**
- * @swagger
- * /api/tickets/verify/{id}:
- *   get:
- *     summary: Verify a ticket by ID
- *     tags: [Tickets]
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         description: ID of the ticket
- *         schema:
- *           type: string
- *     responses:
- *       '200':
- *         description: Successful response
- */
 
 export const verifyTicketById = async (req: Request, res: Response): Promise<void> => {
   const id = req.params.id;
@@ -196,26 +103,6 @@ export const verifyTicket = async (ticket: ITicket): Promise<boolean> => {
     return false;
   }
 }
-
-/**
- * @swagger
- * /api/tickets:
- *   delete:
- *     summary: Delete a ticket by ID
- *     tags: [Tickets]
- *     parameters:
- *       - in: query
- *         name: id
- *         required: true
- *         description: ID of the ticket
- *         schema:
- *           type: string
- *     responses:
- *       '200':
- *         description: Successful response
- *       '404':
- *         description: User not found
- */
 
 export const deleteTicket = async (req: Request, res: Response): Promise<void> => {
   const id = req.query.id as string;
