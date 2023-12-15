@@ -1,5 +1,5 @@
 import {Router} from "express";
-import { auth, admin } from "../middlewares/authentification";
+import { auth, admin, employe } from "../middlewares/authentification";
 import { validateGet, validatePost, schemas } from "../middlewares/validationMiddleware";
 import { addReservation, getAllTicketByTrain, getTicketById, verifyTicketById } from "../controlers/ticketController";
 
@@ -9,7 +9,7 @@ const ticketRoutes = Router();
 ticketRoutes.get('/train/:id', auth, getAllTicketByTrain);
 ticketRoutes.get("/", auth, admin, getAllTicketByTrain)
 ticketRoutes.get('/:id', auth, getTicketById);
-ticketRoutes.get('/verify/:id', auth, admin, verifyTicketById);
+ticketRoutes.get('/verify/:id', auth, employe, verifyTicketById);
 ticketRoutes.post('/', auth, validatePost(schemas.addReservation), auth, addReservation);
 ticketRoutes.delete('/:id', auth, admin,);
 // ticketRoutes.put('/:id', auth, admin, updateTrain);
